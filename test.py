@@ -10,11 +10,12 @@ data=[]
 inputfolder=cwd+"/assets"
 
 def load_images_from_folder(folder,image_name):
-    #images=[]
-    # for filename in os.listdir(folder):
+
         img = cv2.imread(os.path.join(folder,str(image_name)),-1)
         if img is not None:
            image=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
+           img = cv2.GaussianBlur(img, (5,5), 0)
+           cv2.threshold(img,127,255,cv2.THRESH_BINARY)
         #    cv2.imwrite('preproceced/'+filename,image)
            hImg,wImg=image.shape
            boxes=pytesseract.image_to_data(image)
@@ -31,7 +32,8 @@ def load_images_from_folder(folder,image_name):
                        image=cv2.rotate(image, cv2.ROTATE_180)   
            id = pytesseract.image_to_string(ID, lang='eng',config='--psm 6')
            name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
-           data.append({'name':name.replace('Name: ', ''),'id':id})
+           data.append({'name':name.replace('Name: ', '').replace('\n', ''),'id':id.replace('\n', ''),'ImageName':image_name})
+           
         else:
           return "image not existing"
       
@@ -42,7 +44,6 @@ def load_images_from_folder(folder,image_name):
         f = open("data.txt", "w")
         f.write(str(data))
         f.close()
-        
 
 
-load_images_from_folder(inputfolder,'20230622062515844.jpg')
+load_images_from_folder(inputfolder,'20230622063128228.jpg')

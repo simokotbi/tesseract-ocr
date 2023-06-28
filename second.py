@@ -14,9 +14,13 @@ def load_images_from_folder(folder):
     #images=[]
     for filename in os.listdir(folder):
         img = cv2.imread(os.path.join(folder,filename),-1)
+        
         if img is not None:
            image=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
+           img = cv2.GaussianBlur(img, (5,5), 0)
+           cv2.threshold(img,127,255,cv2.THRESH_BINARY)
            cv2.imwrite('preproceced/'+filename,image)
+           
            #images.append(filename)
     #return images
 #images=
