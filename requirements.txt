@@ -1,0 +1,7 @@
+fastapi
+typing
+uvicorn
+opencv-python-headless
+pytesseract
+regex
+python-multipart
