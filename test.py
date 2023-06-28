@@ -10,7 +10,6 @@ data=[]
 inputfolder=cwd+"/assets"
 
 def load_images_from_folder(folder,image_name):
-
         img = cv2.imread(os.path.join(folder,str(image_name)),-1)
         if img is not None:
            image=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
@@ -33,17 +32,18 @@ def load_images_from_folder(folder,image_name):
            id = pytesseract.image_to_string(ID, lang='eng',config='--psm 6')
            name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
            data.append({'name':name.replace('Name: ', '').replace('\n', ''),'id':id.replace('\n', ''),'ImageName':image_name})
-           
+           return data
         else:
           return "image not existing"
       
-        print("data is :")
-        print(data) 
-        # "a" - Append - will append to the end of the file
-        # "w" - Write - will overwrite any existing content
-        f = open("data.txt", "w")
-        f.write(str(data))
-        f.close()
+        # print("data is :")
+        # print(data) 
+        # # "a" - Append - will append to the end of the file
+        # # "w" - Write - will overwrite any existing content
+        # f = open("data.txt", "w")
+        # f.write(str(data))
+        # f.close()
 
 
-load_images_from_folder(inputfolder,'20230622063128228.jpg')
+def treatImage(image_name):
+    return load_images_from_folder(inputfolder, image_name)
