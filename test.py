@@ -2,7 +2,8 @@ import cv2
 import pytesseract
 import re
 import os
- 
+import numpy as np
+from regex import text_clean_up
  
 cwd = os.getcwd()
 data=[]
@@ -13,36 +14,29 @@ def load_images_from_folder(folder,image_name):
         img = cv2.imread(os.path.join(folder,str(image_name)),-1)
         if img is not None:
            image=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
-           img = cv2.GaussianBlur(img, (5,5), 0)
-           cv2.threshold(img,127,255,cv2.THRESH_BINARY)
-        #    cv2.imwrite('preproceced/'+filename,image)
+         #   image = cv2.GaussianBlur(image, (5,5), 0)
+           image = cv2.bilateralFilter(image,9,75,75)
+
+           kernel = np.ones((1, 1), np.uint8) 
+           image = cv2.dilate(image, kernel, iterations=1)  
+           image = cv2.erode(image, kernel, iterations=1)
+           cv2.threshold(image,127,255,cv2.THRESH_BINARY)
+           image = cv2.resize(image,(1356,856))
            hImg,wImg=image.shape
-           boxes=pytesseract.image_to_data(image)
-           for x,b in enumerate(boxes.splitlines()):
-              if x!=0:
-                 b=b.split()
-                 #print(b)
-                 if len(b)==12:
-                  
-                    NAME=image[632:632+39,20:20+529]
-                    ID=image[320:320+80,476:476+462]
-                    name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
-                    if name.startswith("Name:")==False:
-                       image=cv2.rotate(image, cv2.ROTATE_180)   
-           id = pytesseract.image_to_string(ID, lang='eng',config='--psm 6')
-           name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
-           data.append({'name':name.replace('Name: ', '').replace('\n', ''),'id':id.replace('\n', ''),'ImageName':image_name})
+         
+           test=image[171:171+500,20:20+1069]
+           test = pytesseract.image_to_string(test, lang='eng',config='--psm 6')
+           pattern = r'Name:'
+           match = re.search(pattern, test)
+           if not match:
+               image=cv2.rotate(image, cv2.ROTATE_180)    
+         
+           test=image[171:171+500,20:20+1069]
+           test = pytesseract.image_to_string(test, lang='eng',config='--psm 6')
+           data=text_clean_up(test)
            return data
         else:
           return "image not existing"
-      
-        # print("data is :")
-        # print(data) 
-        # # "a" - Append - will append to the end of the file
-        # # "w" - Write - will overwrite any existing content
-        # f = open("data.txt", "w")
-        # f.write(str(data))
-        # f.close()
 
 
 def treatImage(image_name):

@@ -2,7 +2,7 @@ import cv2
 import pytesseract
 import re
 import os
- 
+from regex1 import text_clean_up
  
 cwd = os.getcwd()
 data=[]
@@ -17,8 +17,9 @@ def load_images_from_folder(folder):
         
         if img is not None:
            image=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
-           img = cv2.GaussianBlur(img, (5,5), 0)
+           image = cv2.GaussianBlur(image, (5,5), 0)
            cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+           image = cv2.resize(image,(1356,856))
            cv2.imwrite('preproceced/'+filename,image)
            
            #images.append(filename)
@@ -42,17 +43,20 @@ def get_data_from_images():
                 b=b.split()
                 #print(b)
                 if len(b)==12:
-                  
-                   NAME=src[632:632+39,20:20+529]
-                   ID=src[320:320+80,476:476+462]
-                   name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
-                   if name.startswith("Name:")==False:
-                      src=cv2.rotate(src, cv2.ROTATE_180)   
-          id = pytesseract.image_to_string(ID, lang='eng',config='--psm 6')
-          name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
-          data.append({'name':name.replace('Name: ', ''),'id':id})
-      
-      
+                     
+                  test=src[171:171+500,20:20+1069]
+                    
+         #           NAME=src[632:632+39,20:20+529]
+         #           ID=src[320:320+80,476:476+462]
+         #           name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
+         #           if name.startswith("Name:")==False:
+         #              src=cv2.rotate(src, cv2.ROTATE_180)   
+         #  id = pytesseract.image_to_string(ID, lang='eng',config='--psm 6')
+         #  name = pytesseract.image_to_string(NAME, lang='eng',config='--psm 6')
+         #  data.append({'name':name.replace('Name: ', ''),'id':id})
+    test = pytesseract.image_to_string(test, lang='eng',config='--psm 6')
+
+    data=text_clean_up(test)
     print("data is :")
     print(data) 
     # "a" - Append - will append to the end of the file
