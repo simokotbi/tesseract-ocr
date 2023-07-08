@@ -1,6 +1,6 @@
 import re
 #text="VG treaty. as\nbaat ID Number / 4, 5) a)\n4 F 784-1987-5702743-2\n- ; Name: Jude Savio Dcoutho\nDate of Birth: 20/07/1987\nNationality: India\n4 issuing Date /))<Y! mG\n"
-text = "SS PMICTIL PICTILILY Wai U Wasi ——— “=>\n‘ ID Number / 44 s¢l! ay\n784-1987 -5702743-2\nSIS gab pew sige aw’!\nq\n’!@“Name: Jude Savio Dcoutho id\n"
+#text = "SS PMICTIL PICTILILY Wai U Wasi ——— “=>\n‘ ID Number / 44 s¢l! ay\n784-1987 -5702743-2\nSIS gab pew sige aw’!\nq\n’!@“Name: Jude Savio Dcoutho id\n"
 # SS PMICTIL PICTILILY Wai U Wasi ——— “=>\n‘ ID Number / 44 s¢l! ay\n784-1987 -5702743-2\nSIS gab pew sige aw’!\nq\nName: Jude Savio Dcoutho id\n']
 def text_clean_up(text):
     data=[]
